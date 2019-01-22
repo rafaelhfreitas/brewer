@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bigworks.brewer.model.Beer;
+import com.bigworks.brewer.repository.Beers;
 
 @Controller
 public class BeersController {
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(BeersController.class);
+		
+	@Autowired
+	private Beers beers;
 
     @RequestMapping("/beers/new")
     public String newOne(Beer beer){
@@ -30,6 +35,7 @@ public class BeersController {
 //    		logger.info("Erro " + beer);
 //    	}
     	
+    	beers.findAll();
         return "beer/InsertBeer";
     }
     
