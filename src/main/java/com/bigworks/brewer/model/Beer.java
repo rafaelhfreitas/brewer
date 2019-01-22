@@ -16,6 +16,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.bigworks.brewer.validation.SKU;
+
 
 @Entity
 @Table(name = "beer")
@@ -23,8 +25,9 @@ public class Beer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id;	
 	
+    @SKU
 	@NotBlank(message = "SKU é obrigatório")
 	private String sku;
 	
