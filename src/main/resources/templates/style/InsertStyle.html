@@ -22,11 +22,16 @@
 		</div>
 
 		<div class="container-fluid">
-			<form>
+		
+			<th:block th:include="fragments/MessagesSuccess"></th:block>	
+				
+			<form  method="POST" th:object="${style}" class="form-vertical  js-form-loading">
+				
+				<th:block th:include="fragments/MessagesErrorValidation"></th:block>
 				<div class="row">
-					<div class="form-group  col-sm-8">
-						<label for="nome">Nome</label>
-						<input type="text" class="form-control" id="nome" autofocus="autofocus"/>
+					<div class="form-group  col-sm-8" th:classappend="${#fields.hasErrors('name')} ? has-error">
+						<label for="name" class="control-label">Nome</label>
+						<input type="text" class="form-control" id="name" autofocus="autofocus" th:field="*{name}"/>
 					</div>
 				</div>
 				
