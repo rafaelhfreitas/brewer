@@ -11,10 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bigworks.brewer.model.Beer;
+import com.bigworks.brewer.model.Flavor;
+import com.bigworks.brewer.model.Origin;
 import com.bigworks.brewer.repository.Beers;
+import com.bigworks.brewer.repository.Styles;
+import com.bigworks.brewer.service.RegisterBeerService;
 
 @Controller
 public class BeersController {
@@ -24,30 +29,52 @@ public class BeersController {
 		
 	@Autowired
 	private Beers beers;
+		
+	@Autowired
+	private Styles styles;
+	
+	@Autowired
+	private RegisterBeerService registerBeerService;
 
     @RequestMapping("/beers/new")
-    public String newOne(Beer beer){
+    public ModelAndView newOne(Beer beer){
     	
     	logger.error("Aqui é um log nível error");
 //    	logger.info("Aquié um log nível info");
 //    	
 //    	if (logger.isDebugEnabled()) {
 //    		logger.info("Erro " + beer);
-//    	}
+//    	}    	
+//    	Optional<Beer> beerOptional = beers.findBySkuIgnoreCase("AAA1111");
+//    	System.out.println(beerOptional.isPresent());
     	
-    	beers.findAll();
-        return "beer/InsertBeer";
+    	ModelAndView mv = new ModelAndView("beer/InsertBeer");
+    	mv.addObject("flavors", Flavor.values());
+    	mv.addObject("styles", styles.findAll());
+    	mv.addObject("origins", Origin.values());
+    	
+        return mv;
     }
     
     @RequestMapping(value = "/beers/new", method= RequestMethod.POST)
-    public String create(@Valid Beer beer, BindingResult result, Model model, RedirectAttributes attributes ) {
+    public ModelAndView create(@Valid Beer beer, BindingResult result, Model model, RedirectAttributes attributes ) {
     	if(result.hasErrors()) {
     		//model.addAttribute(beer);
     		return newOne(beer);
     	}
+    	
+//    	System.out.println(">>>> sku " + beer.getSku());
+//    	System.out.println(">>>> flavor " + beer.getFlavor());
+//    	System.out.println(">>>> origin " + beer.getOrigin());
+//
+//    	System.out.println(">>>> beer.getStyle() " + beer.getStyle() );
+//    	if (beer.getStyle() != null) {
+//    		System.out.println(">>>> style " + beer.getStyle().getId());	
+//    	}
+    	
+    	registerBeerService.save(beer);
     	attributes.addFlashAttribute("message", "Beer saved with sucess.");
-    	System.out.println(">>>> sku " + beer.getSku());
-    	return "redirect:/beers/new";
+    	return new ModelAndView("redirect:/beers/new");
     	
     }
     
