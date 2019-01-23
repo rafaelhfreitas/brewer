@@ -18,13 +18,13 @@ public class RegisterStyleService {
 	
 	
 	@Transactional
-	public void save(Style style) {
+	public Style save(Style style) {
 		Optional<Style> styleOptional = styles.findByNameIgnoreCase(style.getName());
 		if (styleOptional.isPresent()) {
 			throw new NameStyleAlreadyExistsException("Nome do estilo já cadastrado");
 		}
 		
-		styles.save(style);
+		return styles.saveAndFlush(style);
 	}
 
 }

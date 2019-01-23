@@ -122,5 +122,10 @@
 		
 		<div th:replace="style/registerFastStyle :: modal"></div>
 	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/style.register-fast.js}"></script>
+	
+	</th:block>
 </body>
 </html>
