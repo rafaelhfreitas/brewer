@@ -9,16 +9,16 @@ Brewer.StyleFastRegister = (function() {
 		this.url = this.form.attr('action');
 		this.inputStyleName = $('#styleName');
 		this.containerMessageError = $('.js-message-register-fast-style');		
-	}
+	}	
 	
-	StyleFastRegister.prototype.start = function ()  {
+	StyleFastRegister.prototype.start = function()  {
 		this.form.on('submit', function(event) { event.preventDefault() });
 		this.modal.on('shown.bs.modal', onModalShow.bind(this));
 		this.modal.on('hide.bs.modal', onModalClose.bind(this));
 		this.saveButton.on('click', onSaveButtonClick.bind(this));		
 	}
 
-	function onModalShow(){
+	function onModalShow() {
 		this.inputStyleName.focus();		
 	}
 	
@@ -58,11 +58,9 @@ Brewer.StyleFastRegister = (function() {
 	
 	return StyleFastRegister;
 	
-})();
+}());
 
-$(function() {
-	
+$(function() {	
 	var styleFastRegister = new Brewer.StyleFastRegister();
 	styleFastRegister.start(); 	
-
 });
