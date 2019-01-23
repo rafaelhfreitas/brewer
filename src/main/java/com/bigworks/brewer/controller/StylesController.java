@@ -20,12 +20,13 @@ import com.bigworks.brewer.service.RegisterStyleService;
 import com.bigworks.brewer.service.exception.NameStyleAlreadyExistsException;
 
 @Controller
+@RequestMapping("/styles")
 public class StylesController {	
 	
 	@Autowired
 	private RegisterStyleService registerStyleService;
 	
-	@RequestMapping("/styles/new")
+	@RequestMapping("/new")
 	public ModelAndView newOne(Style style) {
 		
     	ModelAndView mv = new ModelAndView("style/InsertStyle");
@@ -33,7 +34,7 @@ public class StylesController {
         return mv;
 	}	
 		
-	@RequestMapping(value = "/styles/new", method= RequestMethod.POST)
+	@RequestMapping(value = "/new", method= RequestMethod.POST)
     public ModelAndView create(@Valid Style style, BindingResult result, Model model, RedirectAttributes attributes ) {
     	if(result.hasErrors()) {
     		return newOne(style);
@@ -49,7 +50,7 @@ public class StylesController {
     	return new ModelAndView("redirect:/styles/new");		
 	}
 	
-	@RequestMapping(value = "/styles", method=RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@RequestMapping( method=RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<?> save(@RequestBody @Valid Style style, BindingResult result) {
 		
 		if(result.hasErrors()) {
@@ -57,11 +58,7 @@ public class StylesController {
 			
 		}
 		
-		try {
-			style = registerStyleService.save(style);
-		} catch (NameStyleAlreadyExistsException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		style = registerStyleService.save(style);
 		
 		return ResponseEntity.ok(style);
 	}
