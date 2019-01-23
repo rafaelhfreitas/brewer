@@ -2,7 +2,8 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="'layout/DefaultLayout'">
+	layout:decorator="'layout/DefaultLayout'"
+	xmlns:brewer="http://brewer.bigworks.com">
 	
 <head>
 	<title>Cadastro de cerveja</title>
@@ -29,7 +30,7 @@
 				<th:block th:include="fragments/MessagesErrorValidation"></th:block>
 					
 				<div class="row">
-					<div class="col-sm-2  form-group" th:classappend="${#fields.hasErrors('sku')} ? has-error">
+					<div class="col-sm-2  form-group" brewer:classforerror="sku">
 						<label for="sku" class="control-label">SKU</label>
 						<input id="sku" type="text" class="form-control" th:field="*{sku}"/>
 					</div>

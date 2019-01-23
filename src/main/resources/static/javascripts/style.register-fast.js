@@ -1,6 +1,6 @@
 var Brewer = Brewer || {};
 
-Brewer.styleFastRegister = (function() {
+Brewer.StyleFastRegister = (function() {
 	
 	function StyleFastRegister() {
 		this.modal = $(modalRegisterFastStyle);
@@ -8,7 +8,7 @@ Brewer.styleFastRegister = (function() {
 		this.form = this.modal.find('form');	
 		this.url = this.form.attr('action');
 		this.inputStyleName = $('#styleName');
-		this.containerMessageError = $('.js-message-register-fast-style')		
+		this.containerMessageError = $('.js-message-register-fast-style');		
 	}
 	
 	StyleFastRegister.prototype.start = function ()  {
