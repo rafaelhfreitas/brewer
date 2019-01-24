@@ -11,7 +11,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 public class MessageElementTagProcessor  extends AbstractElementTagProcessor{
 
 	private static final String TAG_NAME = "message";
-	private static final int PRECEDENCE= 1000;
+	private static final int PRECEDENCE = 1000;
 	
 	public MessageElementTagProcessor(String dialectPrefix) {
 		super(TemplateMode.HTML, dialectPrefix, TAG_NAME, true, null, false, PRECEDENCE);
@@ -23,8 +23,8 @@ public class MessageElementTagProcessor  extends AbstractElementTagProcessor{
 		
 		IModelFactory modelFactory = context.getModelFactory();
 		IModel model = modelFactory.createModel();
-		model.add(modelFactory.createStandaloneElementTag("th:block","th:include", "fragments/MessagesSuccess"));
-		model.add(modelFactory.createStandaloneElementTag("th:block","th:include", "fragments/MessagesErrorValidation"));
+		model.add(modelFactory.createStandaloneElementTag("th:block", "th:include", "fragments/MessagesSuccess"));
+		model.add(modelFactory.createStandaloneElementTag("th:block", "th:include", "fragments/MessagesErrorValidation"));
 				
 		structureHandler.replaceWith(model, true);			
 	}
