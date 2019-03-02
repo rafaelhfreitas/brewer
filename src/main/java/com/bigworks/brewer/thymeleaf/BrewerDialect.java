@@ -10,7 +10,7 @@ import org.thymeleaf.standard.StandardDialect;
 import com.bigworks.brewer.thymeleaf.processor.ClassForErrorAttributeTagProcessor;
 import com.bigworks.brewer.thymeleaf.processor.MessageElementTagProcessor;
 
-public class BrewerDialect  extends AbstractProcessorDialect{
+public class BrewerDialect extends AbstractProcessorDialect{
 	
 	public BrewerDialect() {
 		super("Bigworks Brewer", "brewer", StandardDialect.PROCESSOR_PRECEDENCE);

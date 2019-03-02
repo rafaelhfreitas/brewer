@@ -27,7 +27,7 @@ Brewer.UploadPicture = (function() {
 		
 		
 		if(this.inputPictureName.val()){
-			onUploadComplete.call(this,{ name: this.inputPictureName, contentType: this.inputContentType()});
+			onUploadComplete.call(this,{ name: this.inputPictureName.val(), contentType: this.inputContentType.val()});
 		}
 		
 	} 	

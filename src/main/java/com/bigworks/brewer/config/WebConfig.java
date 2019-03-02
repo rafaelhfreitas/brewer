@@ -22,10 +22,12 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import com.bigworks.brewer.controller.BeersController;
 import com.bigworks.brewer.controller.converter.StyleConverter;
+import com.bigworks.brewer.thymeleaf.BrewerDialect;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
@@ -56,9 +58,9 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         engine.setEnableSpringELCompiler(true);
         engine.setTemplateResolver(templateResolver());        
         engine.addDialect(new LayoutDialect());
+        engine.addDialect(new BrewerDialect());
         return engine;
         
-
     }
 
     private ITemplateResolver templateResolver() {
@@ -66,7 +68,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         resolver.setApplicationContext(applicationContext);
         resolver.setPrefix("classpath:/templates/");
         resolver.setSuffix(".html");
-        resolver.setTemplateMode("TemplateMode.HTML");
+        resolver.setTemplateMode(TemplateMode.HTML);
         return resolver;
     }
     
