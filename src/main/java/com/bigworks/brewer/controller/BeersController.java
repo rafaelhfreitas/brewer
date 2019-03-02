@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bigworks.brewer.model.Beer;
 import com.bigworks.brewer.model.Flavor;
 import com.bigworks.brewer.model.Origin;
-import com.bigworks.brewer.repository.Beers;
 import com.bigworks.brewer.repository.Styles;
 import com.bigworks.brewer.service.RegisterBeerService;
 
@@ -27,8 +26,8 @@ public class BeersController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BeersController.class);
 		
-	@Autowired
-	private Beers beers;
+//	@Autowired
+//	private Beers beers;
 		
 	@Autowired
 	private Styles styles;

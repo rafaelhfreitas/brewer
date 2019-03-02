@@ -75,12 +75,33 @@ public class Beer {
 	@ManyToOne
 	@JoinColumn(name = "style_id")
 	private Style style;
+		 
+	private String picture;
+	
+	@Column(name="content_type")
+	private String contentType;
 	
 	@PrePersist @PreUpdate
 	public void prePersistUpdate() {
 		sku = sku.toUpperCase();
 	}
     
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
 	public String getDescription() {
 		return description;
 	}
