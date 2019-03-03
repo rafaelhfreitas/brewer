@@ -59,6 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         engine.setTemplateResolver(templateResolver());        
         engine.addDialect(new LayoutDialect());
         engine.addDialect(new BrewerDialect());
+        System.out.println("Teste rafael " + engine.getDialects().toString());
         return engine;
         
     }
