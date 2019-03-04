@@ -89,7 +89,7 @@ public class BeersController {
     }
     
     @GetMapping
-    public ModelAndView find(BeerFilter beerFilter, BindingResult result,@PageableDefault(size = 2 ) Pageable pageable, HttpServletRequest httpServletRequest) {
+    public ModelAndView find(BeerFilter beerFilter, BindingResult result,@PageableDefault(size = 3 ) Pageable pageable, HttpServletRequest httpServletRequest) {
     	ModelAndView mv = new ModelAndView("beer/FindBeers");
     	mv.addObject("styles",styles.findAll());
     	mv.addObject("flavors", Flavor.values());

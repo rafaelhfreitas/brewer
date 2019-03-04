@@ -6,11 +6,13 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +39,13 @@ public class BeersImpl implements BeersQueries {
 		
 		criteria.setFirstResult(actualPage * totalRecordsPerPage );
 		criteria.setMaxResults(totalRecordsPerPage);
+		
+		Sort sort = pageable.getSort();
+		if (sort != null) {
+			Sort.Order order = sort.iterator().next();
+			String property = order.getProperty();
+			criteria.addOrder(order.isAscending() ? Order.asc(property): Order.desc(property) );
+		}
 				
 		addFilter(filter, criteria);
 
@@ -53,7 +62,7 @@ public class BeersImpl implements BeersQueries {
 	private void addFilter(BeerFilter filter, Criteria criteria) {
 		if (filter != null) {
 			if(!StringUtils.isEmpty(filter.getSku())) {
-				criteria.add(Restrictions.eq("sku", filter.getSku()));
+				criteria.add(Restrictions.ilike("sku", filter.getSku(), MatchMode.ANYWHERE));
 			}
 			
 			if(!StringUtils.isEmpty(filter.getName())) {
@@ -82,7 +91,6 @@ public class BeersImpl implements BeersQueries {
 		}
 	}
 	
-
 
 	private boolean isStylePresent(BeerFilter filter) {
 		return filter.getStyle() != null && filter.getStyle().getId() != null;

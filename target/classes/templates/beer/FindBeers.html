@@ -101,8 +101,13 @@
 				<thead>
 					<tr>
 						<th class="table-beers-col-picture"></th>
-						<th class="table-beers-col-sku">SKU</th>
-						<th class="table-beers-col-name">Nome</th>
+						<th class="table-beers-col-sku">
+ 							<!--<th:block th:replace="fragments/Ordination  :: order (${page}, 'sku', 'SKU')" ></th:block> -->
+							<brewer:order page="${page}" field="sku" text="SKU"/>
+						</th>
+						<th class="table-beers-col-name">
+							<brewer:order page="${page}" field="name" text="Nome"/>										
+						</th>	
 						<th class="table-beers-col-style">Estilo</th>
 						<th class="table-beers-col-origin">Origem</th>
 						<th class="table-beers-col-price">Valor</th>
