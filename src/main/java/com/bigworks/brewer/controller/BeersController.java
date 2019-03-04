@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,10 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bigworks.brewer.model.Beer;
 import com.bigworks.brewer.model.Flavor;
 import com.bigworks.brewer.model.Origin;
+import com.bigworks.brewer.repository.Beers;
 import com.bigworks.brewer.repository.Styles;
+import com.bigworks.brewer.repository.filter.BeerFilter;
 import com.bigworks.brewer.service.RegisterBeerService;
 
 @Controller
+@RequestMapping("/beers")
 public class BeersController {
 	
 	
@@ -33,9 +37,12 @@ public class BeersController {
 	private Styles styles;
 	
 	@Autowired
+	private Beers beers;
+	
+	@Autowired
 	private RegisterBeerService registerBeerService;
 
-    @RequestMapping("/beers/new")
+    @RequestMapping("/new")
     public ModelAndView newOne(Beer beer){
     	
     	logger.error("Aqui é um log nível error");
@@ -55,7 +62,7 @@ public class BeersController {
         return mv;
     }
     
-    @RequestMapping(value = "/beers/new", method= RequestMethod.POST)
+    @RequestMapping(value = "/new", method= RequestMethod.POST)
     public ModelAndView create(@Valid Beer beer, BindingResult result, Model model, RedirectAttributes attributes ) {
     	if(result.hasErrors()) {
     		//model.addAttribute(beer);
@@ -75,6 +82,18 @@ public class BeersController {
     	attributes.addFlashAttribute("message", "Beer saved with sucess.");
     	return new ModelAndView("redirect:/beers/new");
     	
+    }
+    
+    @GetMapping
+    public ModelAndView find(BeerFilter beerFilter, BindingResult result) {
+    	ModelAndView mv = new ModelAndView("beer/FindBeers");
+    	mv.addObject("styles",styles.findAll());
+    	mv.addObject("flavors", Flavor.values());
+    	mv.addObject("origins", Origin.values());
+    	
+    	mv.addObject("beers", beers.filter(beerFilter));
+    	
+    	return mv;    	
     }
     
 }

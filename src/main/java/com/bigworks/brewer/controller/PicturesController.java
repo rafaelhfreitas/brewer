@@ -38,4 +38,9 @@ public class PicturesController {
 		return pictureStorage.temporaryPictureRecover(name);
 	}
 
+	@GetMapping("{name:.*}")
+	public byte[] pictureRecover(@PathVariable String name) {
+		return pictureStorage.pictureRecover(name);
+	}	
+	
 }

@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bigworks.brewer.storage.PictureStorage;
 
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
+
 public class PictureStorageLocal implements PictureStorage {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PictureStorageLocal.class);
@@ -48,6 +51,46 @@ public class PictureStorageLocal implements PictureStorage {
 		
 	}
 	
+	
+	@Override
+	public byte[] pictureRecover(String name) {
+		try {
+			return Files.readAllBytes(this.local.resolve(name));
+		} catch (IOException e) {
+			throw new RuntimeException("Erro lendo a foto ",e);
+		}
+	}
+	
+	
+	@Override
+	public byte[] temporaryPictureRecover(String name) {
+		try {
+			return Files.readAllBytes(this.temporaryLocal.resolve(name));
+		} catch (IOException e) {
+			throw new RuntimeException("Erro lendo a foto temporaria",e);
+		}
+	}	
+
+	
+	@Override
+	public void save(String picture) {
+		try {
+			Files.move(this.temporaryLocal.resolve(picture), this.local.resolve(picture));
+		} catch (IOException e) {
+			throw new RuntimeException("Erro ao mover a foto para o destino final");
+		}
+		
+		
+		try {
+			Thumbnails.of(this.local.resolve(picture).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+		} catch (IOException e) {
+			throw new RuntimeException("Erro gerando o thumbnail");
+		}
+		
+		
+	}
+	
+	
 	private void createFolders() {
 		try {
 			Files.createDirectories(this.local);
@@ -77,13 +120,8 @@ public class PictureStorageLocal implements PictureStorage {
 		return newName;
 	}
 
-	@Override
-	public byte[] temporaryPictureRecover(String name) {
-		try {
-			return Files.readAllBytes(this.temporaryLocal.resolve(name));
-		} catch (IOException e) {
-			throw new RuntimeException("Erro lendo a foto temporaria",e);
-		}
-	}
+
+
+
 
 }

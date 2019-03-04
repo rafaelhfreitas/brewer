@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 import com.bigworks.brewer.validation.SKU;
 
@@ -89,7 +90,11 @@ public class Beer {
 	public String getPicture() {
 		return picture;
 	}
-
+	
+	public String getPictureOrMock() {
+		return !StringUtils.isEmpty(picture) ? picture : "cerveja-mock.png";
+	}
+	
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
