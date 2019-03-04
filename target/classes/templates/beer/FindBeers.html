@@ -43,7 +43,7 @@
 				
 				<div class="form-group  col-sm-6" >
 					<label class="control-label" for="name">Nome</label>
-					<input type="text" class="form-control" id="name"/ th:field="*{name}">
+					<input type="text" class="form-control" id="name" th:field="*{name}"/>
 				</div>
 			</div>
 			
@@ -111,7 +111,7 @@
 				</thead>
 				
 				<tbody>
-					<tr th:each="beer: ${beers}">
+					<tr th:each="beer: ${page.content}">
 						<td class="text-center">
 							<img th:src="@{/pictures/thumbnail.{picture}(picture=${beer.pictureOrMock})}" class="img-responsive">
 						</td>
@@ -129,15 +129,32 @@
 							</a>							
 						</td>
 					</tr>
-					<tr th:if="${#lists.isEmpty(beers)}">
+					<tr th:if="${page.empty}">
 						<td colspan="7">Nenhuma cerveja encontrada </td>
 					</tr>
-				</tbody>
-			
+				</tbody>			
 			</table>
-
-
 		</div>
+		
+		<div class="col-sm-12  text-center"  th:if="${not page.empty}">
+			<nav>
+				<ul class="pagination  pagination-sm" th:with="pageActual=${page.pageActual}">
+					<li th:class="${page.first} ? disabled">
+						<a th:href="${page.urlToPage(pageActual - 1)}" th:remove="${page.first} ? tag"><span>&laquo;</span></a>
+					</li>
+					<th:block th:each="p : ${#numbers.sequence(1,page.total)}" th:with="pageNumber=${p - 1}"> 
+						<li th:class="${pageActual == pageNumber} ? active">
+							<a th:href="${page.urlToPage(pageNumber)}">[[${p}]]</a>
+						</li>
+					</th:block>
+					<li th:class="${page.last} ? disabled">
+						<a th:href="${page.urlToPage(pageActual + 1)}" th:remove="${page.last} ? tag"><span>&raquo;</span></a>
+					</li>														
+				</ul>
+			</nav>
+		</div>
+		
+		
 	</div>	
 
 

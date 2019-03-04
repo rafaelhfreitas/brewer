@@ -1,14 +1,16 @@
 package com.bigworks.brewer.repository.helper.beer;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -25,9 +27,30 @@ public class BeersImpl implements BeersQueries {
 	@Transactional(readOnly=true)
 	@SuppressWarnings("unchecked")
 	@Override 
-	public List<Beer> filter(BeerFilter filter) {
+	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
 		
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Beer.class);
+		
+		
+		int actualPage = pageable.getPageNumber();
+		int totalRecordsPerPage = pageable.getPageSize();
+		
+		criteria.setFirstResult(actualPage * totalRecordsPerPage );
+		criteria.setMaxResults(totalRecordsPerPage);
+				
+		addFilter(filter, criteria);
+
+		return new PageImpl<>(criteria.list(), pageable, total(filter));
+	}
+	
+	private Long total(BeerFilter filter) {
+		Criteria criteria = manager.unwrap((Session.class)).createCriteria(Beer.class);
+		addFilter(filter, criteria);
+		criteria.setProjection(Projections.rowCount());
+		return (Long) criteria.uniqueResult();
+	}	
+
+	private void addFilter(BeerFilter filter, Criteria criteria) {
 		if (filter != null) {
 			if(!StringUtils.isEmpty(filter.getSku())) {
 				criteria.add(Restrictions.eq("sku", filter.getSku()));
@@ -55,12 +78,12 @@ public class BeersImpl implements BeersQueries {
 			if(filter.getPriceUntil()!= null) {
 				criteria.add(Restrictions.le("price", filter.getPriceUntil()));
 			}
-			
-			
+					
 		}
-		return criteria.list();
 	}
 	
+
+
 	private boolean isStylePresent(BeerFilter filter) {
 		return filter.getStyle() != null && filter.getStyle().getId() != null;
 	}
