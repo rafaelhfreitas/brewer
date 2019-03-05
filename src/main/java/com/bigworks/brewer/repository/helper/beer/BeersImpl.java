@@ -6,24 +6,28 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.bigworks.brewer.model.Beer;
 import com.bigworks.brewer.repository.filter.BeerFilter;
+import com.bigworks.brewer.repository.pagination.PaginationUtil;
 
 public class BeersImpl implements BeersQueries {
 	
 	
 	@PersistenceContext
 	private EntityManager manager;
+	
+	
+	@Autowired
+	private PaginationUtil paginationUtil;
 
 	
 	@Transactional(readOnly=true)
@@ -32,20 +36,8 @@ public class BeersImpl implements BeersQueries {
 	public Page<Beer> filter(BeerFilter filter, Pageable pageable) {
 		
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Beer.class);
-		
-		
-		int actualPage = pageable.getPageNumber();
-		int totalRecordsPerPage = pageable.getPageSize();
-		
-		criteria.setFirstResult(actualPage * totalRecordsPerPage );
-		criteria.setMaxResults(totalRecordsPerPage);
-		
-		Sort sort = pageable.getSort();
-		if (sort != null) {
-			Sort.Order order = sort.iterator().next();
-			String property = order.getProperty();
-			criteria.addOrder(order.isAscending() ? Order.asc(property): Order.desc(property) );
-		}
+				
+		paginationUtil.prepare(criteria, pageable);
 				
 		addFilter(filter, criteria);
 

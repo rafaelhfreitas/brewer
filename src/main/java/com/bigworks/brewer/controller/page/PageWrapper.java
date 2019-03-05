@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class PageWrapper<T> {
@@ -19,7 +18,13 @@ public class PageWrapper<T> {
 	
 	public PageWrapper(Page<T> page, HttpServletRequest httpServletRequest) {
 		this.page = page;
-		this.uriBuilder = ServletUriComponentsBuilder.fromRequest(httpServletRequest);
+		//Problema de pesquisa com espaço no filtro. Solução: pegar a url se a query string existente, gerada no template e substituir ocorrnecia de + por espaço e depois construir o novo builder
+		//this.uriBuilder = ServletUriComponentsBuilder.fromRequest(httpServletRequest);
+		String httpUrl = httpServletRequest.getRequestURL().append(
+				httpServletRequest.getQueryString() != null ? "?" + httpServletRequest.getQueryString() : "")
+				.toString().replaceAll("\\+", "%20");			
+				
+		this.uriBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
 	}
 	
 	
